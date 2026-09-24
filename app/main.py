@@ -1,42 +1,44 @@
 from __future__ import annotations
 
+class Distance:
+    def __init__(self, km: int | float) -> None:
+        self.km = km
 
-class OnlineCourse:
-    """Клас для представлення онлайн-курсу."""
+    def __str__(self) -> str:
+        return f"Distance: {self.km} kilometers."
 
-    def __init__(self, name: str, description: str, weeks: int) -> None:
-        """
-        Ініціалізація курсу.
+    def __repr__(self) -> str:
+        return f"Distance(km={self.km})"
 
-        :param name: Назва курсу
-        :param description: Опис курсу
-        :param weeks: Тривалість у тижнях
-        """
-        self.name = name
-        self.description = description
-        self.weeks = weeks
+    def __add__(self, other: Distance | int | float) -> Distance:
+        if isinstance(other, Distance):
+            return Distance(self.km + other.km)
+        return Distance(self.km + other)
 
-    @staticmethod
-    def days_to_weeks(days: int) -> int:
-        """
-        Перевести кількість днів у тижні (округлення вгору).
+    def __iadd__(self, other: Distance | int | float) -> Distance:
+        if isinstance(other, Distance):
+            self.km += other.km
+        else:
+            self.km += other
+        return self
 
-        :param days: Кількість днів
-        :return: Кількість тижнів
-        """
-        return (days + 6) // 7
+    def __mul__(self, other: int | float) -> Distance:
+        return Distance(self.km * other)
 
-    @classmethod
-    def from_dict(cls, course_dict: dict) -> "OnlineCourse":
-        """
-        Створити курс з словника.
+    def __truediv__(self, other: int | float) -> Distance:
+        return Distance(round(self.km / other, 2))
 
-        :param course_dict: Словник з ключами name, description, days
-        :return: Об'єкт OnlineCourse
-        """
-        name = course_dict["name"]
-        description = course_dict["description"]
-        days = course_dict["days"]
-        weeks = cls.days_to_weeks(days)
-        return cls(name, description, weeks)
+    def __eq__(self, other: Distance | int | float) -> bool:
+        return self.km == (other.km if isinstance(other, Distance) else other)
 
+    def __lt__(self, other: Distance | int | float) -> bool:
+        return self.km < (other.km if isinstance(other, Distance) else other)
+
+    def __le__(self, other: Distance | int | float) -> bool:
+        return self.km <= (other.km if isinstance(other, Distance) else other)
+
+    def __gt__(self, other: Distance | int | float) -> bool:
+        return self.km > (other.km if isinstance(other, Distance) else other)
+
+    def __ge__(self, other: Distance | int | float) -> bool:
+        return self.km >= (other.km if isinstance(other, Distance) else other)
